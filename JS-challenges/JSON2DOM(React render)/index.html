@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    123
+    <script>
+        const container = document.querySelector('body');
+        const vdom = {
+            tag: "DIV",
+            attrs: {
+                id: "app",
+                class: 'yl',
+                "data-index": 'hjx'
+            },
+            children: [
+                {
+                    tag: "SPAN",
+                    children: [
+                        { tag: "A", children: ["链接1"] }
+                    ],
+                },
+                {
+                    tag: "SPAN",
+                    children: [
+                        { tag: "A", children: ["链接2"] },
+                        { tag: "A", children: ["链接3"] },
+                    ],
+                },
+                "这是一个文本节点",
+                12345
+            ],
+        };
+        const vdom2 = { "tag": "DIV", "attrs": { "id": "app" }, "children": [{ "tag": "text", "text": "\n " }, { "tag": "SPAN", "attrs": {}, "children": [{ "tag": "text", "text": "\n " }, { "tag": "A", "attrs": {}, "children": [{ "tag": "text", "text": "链接1" }] }, { "tag": "text", "text": "\n " }] }, { "tag": "text", "text": "\n " }, { "tag": "SPAN", "attrs": {}, "children": [{ "tag": "text", "text": "\n " }, { "tag": "A", "attrs": {}, "children": [{ "tag": "text", "text": "链接2" }] }, { "tag": "text", "text": "\n " }, { "tag": "A", "attrs": {}, "children": [{ "tag": "text", "text": "链接3" }] }, { "tag": "text", "text": "\n " }] }, { "tag": "text", "text": "\n 这是一个文本节点\n 12345\n " }] }
+        function getRelDom(vdom, container) {
+            if (typeof vdom === "string" || typeof vdom === 'number' || vdom.tag === "text") {
+                const textNode = document.createTextNode(String(vdom));
+                textNode.textContent = vdom.text;
+                container.append(textNode);
+                return
+            }
+            const children = vdom.children;
+            const dom = document.createElement(vdom.tag.toLowerCase());
+            const attrsObj = vdom.attrs;
+            if (attrsObj) {
+                for (const key in attrsObj) {
+                    // console.log(key)
+                    // dom[key] = attrsObj[key]
+                    dom.setAttribute(key, attrsObj[key]);
+                }
+            }
+            if (children && children.length > 0) {
+                children.forEach(child => {
+                    getRelDom(child, dom);
+                });
+            }
+            return container.append(dom)
+        }
+
+
+        getRelDom(vdom, container)
+    </script>
+</body>
+
+</html>

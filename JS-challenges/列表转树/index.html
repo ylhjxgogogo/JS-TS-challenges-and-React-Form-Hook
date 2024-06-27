@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function listToTree(arr) {
+            const tree = [];
+            const treeMap = new Map();
+            arr.forEach(item => {
+                treeMap.set(item.id, { ...item, children: [] });
+            });
+            arr.forEach(item => {
+                if (item.pid === 0) {
+                    tree.push(treeMap.get(item.id));
+                }
+                else {
+                    // 将非根节点放入其父节点的 children 数组中;
+                    //找到上级节点
+                    const boss = treeMap.get(item.pid)
+                    //得到父节点的children
+                    const parentChildren = boss.children
+                    parentChildren.push(treeMap.get(item.id)); //把自己作为孩子节点加进去
+                }
+            });
+            return tree;
+
+        }
+        let arr = [
+            { id: 1, name: "部门1", pid: 0 },
+            { id: 2, name: "部门2", pid: 1 },
+            { id: 3, name: "部门3", pid: 1 },
+            { id: 4, name: "部门4", pid: 3 },
+            { id: 5, name: "部门5", pid: 4 },
+            { id: 6, name: "部门6", pid: 0 },
+        ];
+        const ans1 = listToTree(arr);
+        console.log(ans1)
+        const pre = document.createElement('pre');
+        pre.innerText = JSON.stringify(ans1, null, 2)
+        document.body.append(pre)
+        // console.log(ans);
+    </script>
+</body>
+
+</html>

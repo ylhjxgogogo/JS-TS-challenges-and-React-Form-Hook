@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const arr = [1, [2, 3, [4, 5]], 1, 2, [6, 7]];
+        function flat(arr, level = 1) {
+            let newArr = [];
+            level--;
+            arr.forEach((item) => {
+                if (!Array.isArray(item)) {
+                    // 该项不是数组，直接push进去
+                    newArr.push(item);
+                } else {
+                    // item这项是数组
+                    if (level >= 0) {
+                        newArr = newArr.concat(flat(item, level));
+                    } else {
+                        newArr.push(item)
+                    }
+                }
+            });
+            return newArr;
+        }
+
+        const arr2 = flat(arr, 1);
+        console.log(arr2); // [1, 2, 3, [4, 5], 1, 2, 6, 7]
+
+    </script>
+</body>
+
+</html>

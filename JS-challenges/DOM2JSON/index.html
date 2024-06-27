@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <span>
+            <a>链接1</a>
+        </span>
+        <span>
+            <a>链接2</a>
+            <a>链接3</a>
+        </span>
+        这是一个文本节点
+        12345
+    </div>
+    <script>
+        //dom-> json
+        const container = document.getElementById("app");
+        function treeToJson(container) {
+            const obj = {};
+            if (container.nodeType === 3) {
+                //说明是文本节点
+                obj.tag = "text";
+                obj.text = container.nodeValue;
+            } else if (container.nodeType === 1) {
+                //元素节点
+                obj.tag = container.tagName.toLowerCase();
+                obj.attrs = {};
+                for (const attribute of container.attributes) {
+                    //key是一个键值对 name=value;
+                    obj.attrs[attribute.nodeName] = attribute.nodeValue
+                }
+                obj.children = [];
+                //得到所有孩子节点包括，文本节点和元素节点
+                const children = container.childNodes;
+                if (children) {
+                    children.forEach(child => {
+                        obj.children.push(treeToJson(child))
+                    });
+
+                }
+
+            }
+
+            return obj
+
+        }
+        const json = treeToJson(container);
+        const jsonString = JSON.stringify(json, null, 2); // 格式化输出
+        const pre = document.createElement('pre');
+        pre.textContent = jsonString;
+        document.body.appendChild(pre);
+    </script>
+</body>
+
+</html>
